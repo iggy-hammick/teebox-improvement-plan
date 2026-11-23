@@ -419,6 +419,35 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   background: linear-gradient(to right, var(--tb-black), rgba(0, 0, 0, 0));
 }
 
+/* Award badge: starts bottom-right of the hero (80px from the right and the
+   hero's bottom), pins in place as you scroll, and stops with its centre on
+   the middle of the "You need a plan" block. The rail runs from the badge's starting
+   spot to 40px above the end of .tb-badge-track; the badge is sticky inside it. */
+.tb-badge-track { position: relative; }
+.tb-badge-rail {
+  --tb-badge-size: 180px; /* 172px image + 4px stroke each side */
+  position: absolute;
+  z-index: 15;
+  right: var(--tb-gutter);
+  top: calc(764px - 80px - var(--tb-badge-size)); /* hero is 764px tall on desktop */
+  /* stops with the badge centred on the middle of the "You need a plan" block;
+     JS (section 11) measures that block and sets --tb-badge-stop */
+  bottom: var(--tb-badge-stop, 40px);
+  width: var(--tb-badge-size);
+  pointer-events: none;
+}
+.tb-hero__badge {
+  position: sticky;
+  top: min(calc(764px - 80px - var(--tb-badge-size)), calc(100vh - 80px - var(--tb-badge-size)));
+  display: block;
+  width: 172px;
+  height: 172px;
+  max-width: none;
+  border: 4px solid var(--tb-bg-deep); /* #101010, same as the "You need a plan" block */
+  border-radius: 50%;
+  box-sizing: content-box;
+  pointer-events: auto;
+}
 .tb-hero__content {
   position: relative;
   z-index: 1;
@@ -469,6 +498,9 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
     background: linear-gradient(to top, var(--tb-black) 20%, rgba(0, 0, 0, 0.55) 70%, rgba(0, 0, 0, 0.35));
   }
   .tb-hero__content { padding-top: 360px; padding-bottom: 56px; }
+  /* phones: small, top-right of the hero, no pinning */
+  .tb-badge-rail { --tb-badge-size: 104px; top: 168px; bottom: auto; }
+  .tb-hero__badge { position: static; width: 96px; height: 96px; }
 }
 
 /* =========================================================================
@@ -578,27 +610,28 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   .tb-pillar__text { margin-top: 0; font-size: 16px; line-height: 26px; }
 }
 
-/* ---- Value-add cards: eyebrow, then 4 cards per row (3 grid columns each) ----
+/* ---- Value-add cards: subheadline, then 4 cards per row (3 grid columns each) ----
    The eyebrow has the same space above it (from the last essentials row) as
    below it (to the cards): --tb-eyebrow-space. */
 .tb-essentials {
-  --tb-eyebrow-space: 48px; /* gap between the subheadline and the cards */
-  margin-top: 80px;          /* gap from the last row (Progress) */
+  --tb-eyebrow-space: 80px; /* gap between the subheadline and the cards… */
+  margin-top: 80px;          /* …matches the gap above it, from the last row (Progress) */
 }
 .tb-extras {
   list-style: none;
   margin: var(--tb-eyebrow-space) 0 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 × 2, 3 grid columns each */
   gap: var(--tb-col-gap);
 }
+/* cards: #101010 at 50% over the #191919 section, so softer than solid black */
 .tb-extra {
   display: flex;
   flex-direction: column;
   min-height: 240px;
   padding: 32px;
-  background: var(--tb-bg-deep); /* #101010, reversed out of the #191919 section */
+  background: rgba(16, 16, 16, 0.5);
 }
 /* gold check, top left of each card (same icon as other Tee Box pages) */
 .tb-extra__check {
@@ -624,6 +657,9 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   letter-spacing: var(--tb-tracking);
   text-transform: uppercase;
 }
+/* no widows: titles balance their lines, body copy avoids single-word last lines */
+.tb-extra__title { text-wrap: balance; }
+.tb-extra__text { text-wrap: pretty; }
 .tb-extra__title {
   margin: 0;
   font-weight: 500;
@@ -653,7 +689,7 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   .tb-pillars-section { padding: 64px 0 80px; }
   .tb-essentials { margin-top: 56px; }
   .tb-plan__body { margin-top: 24px; font-size: 16px; line-height: 26px; }
-  .tb-essentials { --tb-eyebrow-space: 32px; }
+  .tb-essentials { --tb-eyebrow-space: 56px; }
   .tb-plan__sub, .tb-essentials__title { font-size: 26px; line-height: 32px; }
 
   .tb-extras { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -695,64 +731,121 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
 }
 
 /* =========================================================================
-   Press quote (Figma 8665:1080), photo at 30% over black.
-   Trimmed from Figma's 740px to ~594px tall at 1600 (120px above and below
-   the content). The photo drifts with a gentle parallax on scroll (JS).
+   Phil Kenyon quote + video (Figma 8665:1080)
+   Photo at 70% over black, black → transparent fade from the left, quote
+   left-aligned from grid column 2, play button on the right opening a pop-up.
+   The photo also drifts with a gentle parallax on scroll (JS section 5).
    ========================================================================= */
 .tb-quote {
   position: relative;
   overflow: hidden;
   background: var(--tb-black);
-  --tb-parallax: 60px; /* how far the photo travels either way */
+  --tb-parallax: 60px;
 }
-/* Photo is taller than the block by 2 × --tb-parallax so it can drift without
-   showing edges; JS moves it from -60px to +60px as the block crosses the screen */
+/* Figma: 1822×1075 photo at (-68, -135) in the 1600×740 frame */
 .tb-quote__bg {
   position: absolute;
-  left: 0;
-  top: calc(var(--tb-parallax) * -1);
-  width: 100%;
-  height: calc(100% + 2 * var(--tb-parallax));
+  left: -4.25%;
+  top: -18.24%;
+  width: 113.875%;
+  height: 145.27%;
   max-width: none;
   object-fit: cover;
-  object-position: 50% 39%;
-  opacity: 0.3;
+  opacity: 0.7;
   transform: translate3d(0, var(--tb-parallax-y, 0px), 0);
   will-change: transform;
 }
-.tb-quote__inner {
+.tb-quote__fade {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 77.19%; /* 1235 / 1600 */
+  background: linear-gradient(to right, var(--tb-black), rgba(0, 0, 0, 0)); /* solid black → 0% */
+}
+.tb-quote__layout {
   position: relative;
-  margin: 0 auto;
-  padding-top: 120px;
-  padding-bottom: 120px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--tb-col-gap);
   align-items: center;
-  text-align: center;
+  padding-top: 140px;
+  padding-bottom: 140px;
 }
-.tb-quote__text {
-  margin: 28px 0 0;
-  max-width: 802px;
+.tb-quote__inner {
+  grid-column: 2 / 7;
+  margin: 0;
+  max-width: 580px;
 }
+.tb-quote__mark { display: block; }
+.tb-quote__text { margin: 24px 0 0; }
 .tb-quote__text p {
   font-weight: 500;
   font-size: 40px;
   line-height: 46px;
+  text-wrap: pretty;
 }
-.tb-quote__source { margin: 32px 0 0; }
+.tb-quote__source { margin-top: 32px; display: flex; flex-direction: column; gap: 4px; }
+.tb-quote__name { font-weight: 500; font-size: 24px; line-height: 32px; }
+.tb-quote__role { font-weight: 500; font-size: 20px; line-height: 28px; color: var(--tb-gold); }
+
+.tb-quote__play {
+  grid-column: 9 / 11;
+  justify-self: start;
+  margin-left: 27px; /* Figma: button at x=1080 (col 9 starts at 1053) */
+  width: 203px;
+  height: 203px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  transition: transform .3s cubic-bezier(.2, .7, .2, 1);
+}
+.tb-quote__play img { width: 100%; height: 100%; }
+.tb-quote__play:hover { transform: scale(1.06); }
+.tb-quote__play:focus-visible { outline: 2px solid var(--tb-gold); outline-offset: 6px; }
 
 @media (max-width: 1023px) {
   .tb-quote { --tb-parallax: 40px; }
-  .tb-quote__inner { padding-top: 96px; padding-bottom: 96px; }
+  .tb-quote__fade { width: 100%; background: linear-gradient(to right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.4)); }
+  .tb-quote__layout { display: block; padding-top: 96px; padding-bottom: 96px; }
+  .tb-quote__play { width: 120px; height: 120px; margin: 40px 0 0; }
   .tb-quote__text p { font-size: 30px; line-height: 38px; }
 }
 @media (max-width: 599px) {
-  .tb-quote__inner { padding-top: 72px; padding-bottom: 72px; }
-  .tb-quote__text { margin-top: 24px; }
+  .tb-quote__layout { padding-top: 72px; padding-bottom: 72px; }
   .tb-quote__text p { font-size: 24px; line-height: 32px; }
-  .tb-quote__source { margin-top: 28px; }
-  .tb-quote__source img { width: 140px; height: auto; }
+  .tb-quote__name { font-size: 20px; }
+  .tb-quote__role { font-size: 16px; line-height: 24px; }
+  .tb-quote__play { width: 88px; height: 88px; }
 }
+
+/* ---- Video pop-up ---- */
+.tb-video {
+  width: min(90vw, 1280px);
+  max-width: none;
+  padding: 0;
+  border: 0;
+  background: var(--tb-black);
+  overflow: visible;
+}
+.tb-video::backdrop { background: rgba(0, 0, 0, 0.85); }
+.tb-video__player { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--tb-black); }
+.tb-video__close {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: none;
+  color: var(--tb-white);
+  cursor: pointer;
+}
+.tb-video__close:hover { border-color: var(--tb-gold); color: var(--tb-gold); }
 
 /* =========================================================================
    How our programmes work (Figma 8661:554)
@@ -820,8 +913,39 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
   column-gap: var(--tb-col-gap);
-  padding: 56px 0; /* 56px above the title and below the copy */
+  --tb-step-pad: 56px;  /* above the title and below the copy */
+  --tb-num: 44px;       /* number box size */
+  --tb-num-top: 8px;    /* box offset to the title's cap height */
+  position: relative;
+  padding: var(--tb-step-pad) 0;
   border-top: 1px solid var(--tb-line-soft);
+}
+/* gold dotted line joining each number box to the next (static, not scroll-linked) */
+.tb-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--tb-num) / 2 - 2px);
+  width: 4px;
+  top: calc(var(--tb-step-pad) + var(--tb-num-top) + var(--tb-num) + 8px);
+  bottom: calc(8px - var(--tb-step-pad) - var(--tb-num-top));
+  background: radial-gradient(circle, var(--tb-gold) 1.5px, transparent 2px) 50% 0 / 4px 10px repeat-y;
+  opacity: 0.8;
+  pointer-events: none;
+}
+/* With JS: each segment starts hidden and draws downwards to the next number
+   as its step scrolls into view (plays once). */
+.tb-steps.is-armed .tb-step:not(:last-child)::after {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1s cubic-bezier(.45, 0, .2, 1) .15s;
+}
+.tb-steps.is-armed .tb-step.is-drawn::after { clip-path: inset(0 0 0 0); }
+.tb-steps.is-armed .tb-step__num {
+  transition: background-color .4s ease, color .4s ease;
+}
+/* the next number "lights up" as the line arrives */
+.tb-steps.is-armed .tb-step.is-lit .tb-step__num {
+  background: var(--tb-gold);
+  color: var(--tb-black);
 }
 /* number box: top edge level with the cap height of the step title
    (Poppins caps start ~8px into a 24px/32px line) */
@@ -864,6 +988,26 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   text-underline-offset: 3px;
 }
 .tb-step__link:hover { color: var(--tb-white); }
+/* "play video" link under each step: opens the shared video pop-up */
+.tb-step__video {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--tb-gold);
+  font-family: var(--tb-font-body); /* same as the step copy: Geist Light 18/28 */
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 28px;
+  text-align: left;
+  cursor: pointer;
+}
+.tb-step__video-icon { flex: none; transition: transform .25s ease; }
+.tb-step__video:hover span { text-decoration: underline; text-underline-offset: 4px; }
+.tb-step__video:hover .tb-step__video-icon { transform: scale(1.1); }
 
 @media (max-width: 1279px) {
   .tb-step { grid-template-columns: 44px minmax(0, 1fr); column-gap: 32px; }
@@ -877,10 +1021,10 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   .tb-how__content { padding: 24px var(--tb-gutter) 40px; }
 }
 @media (max-width: 599px) {
-  .tb-step { grid-template-columns: 36px minmax(0, 1fr); column-gap: 20px; padding: 40px 0; }
+  .tb-step { --tb-step-pad: 40px; --tb-num: 36px; --tb-num-top: 7px; grid-template-columns: 36px minmax(0, 1fr); column-gap: 20px; }
   .tb-step__num { width: 36px; height: 36px; margin-top: 7px; font-size: 20px; } /* caps start ~7px into 20px/28px */
   .tb-step__title { font-size: 20px; line-height: 28px; }
-  .tb-step__text, .tb-step__link, .tb-how__intro { font-size: 16px; line-height: 26px; }
+  .tb-step__text, .tb-step__link, .tb-step__video, .tb-how__intro { font-size: 16px; line-height: 26px; }
 }
 
 /* =========================================================================
@@ -1259,7 +1403,56 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   line-height: 28px;
   text-wrap: balance;
 }
-.tb-price-cta__btn { margin-top: 32px; }
+.tb-price-cta__btn { margin-top: 48px; }
+
+/* Member / Non-member toggle: black outline, selected option filled black */
+.tb-audience {
+  display: inline-flex;
+  margin-bottom: 32px;
+  border: 2px solid var(--tb-black);
+}
+.tb-audience[hidden] { display: none; }
+.tb-audience button {
+  padding: 10px 24px;
+  border: 0;
+  background: transparent;
+  color: var(--tb-black);
+  font-family: var(--tb-font);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: var(--tb-tracking);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color .2s ease, color .2s ease;
+}
+.tb-audience button[aria-checked="true"] { background: var(--tb-black); color: var(--tb-gold); }
+.tb-audience button:focus-visible { outline: 2px solid var(--tb-black); outline-offset: 3px; }
+
+/* benefit ticks, in a centred row */
+.tb-price-cta__list {
+  list-style: none;
+  margin: 48px auto 0; /* 16px more breathing room above and below the ticks */
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px 32px;
+  max-width: 960px;
+}
+.tb-price-cta__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--tb-font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+}
+.tb-price-cta__list li[hidden] { display: none; }
+.tb-price-cta__tick { flex: none; }
+@media (max-width: 599px) {
+  .tb-price-cta__list { flex-direction: column; align-items: flex-start; width: fit-content; }
+}
 .tb-price-cta .tb-btn:focus-visible { outline-color: var(--tb-black); }
 @media (max-width: 1023px) {
   .tb-price-cta { padding: 72px 0; }

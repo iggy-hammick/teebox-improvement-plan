@@ -1,0 +1,69 @@
+<!--
+  ARCHIVED: "Your programme at a glance" 12-week timeline (lessons + practice tier pills)
+  Removed from index.html on 23 Nov 2026 to shorten the page. To restore it,
+  paste this markup back into index.html straight after the "How our programmes work" section. Its styles are still in
+  css/teebox-landing.css and its script still runs from js/teebox-landing.js
+  (both do nothing while the markup is absent).
+-->
+    <!-- ============ AT A GLANCE: 12-week timeline ============
+         Not in Figma yet. js/teebox-landing.js (section 2) plots the dots:
+         lessons from the lesson pill (6 / 12 / 24, spread evenly), practice
+         from the tier pill (Silver 5, Gold 8, Platinum 16 sessions a month,
+         so 15 / 24 / 48 over 12 weeks, spread evenly). -->
+    <section class="tb-glance" aria-labelledby="tb-glance-title">
+      <div class="tb-container">
+        <h2 class="tb-h2 tb-glance__title" id="tb-glance-title">Your programme at a glance</h2>
+
+        <div class="tb-glance__controls">
+          <div class="tb-glance__control">
+            <p class="tb-glance__control-label" id="tb-glance-lessons-label">Lessons</p>
+            <div class="tb-pills" role="radiogroup" aria-labelledby="tb-glance-lessons-label" data-tb-timeline-lessons>
+              <button class="tb-pill" type="button" role="radio" aria-checked="false" tabindex="-1" data-lessons="6">6 lessons</button>
+              <button class="tb-pill" type="button" role="radio" aria-checked="true" data-lessons="12">12 lessons</button>
+              <button class="tb-pill" type="button" role="radio" aria-checked="false" tabindex="-1" data-lessons="24">24 lessons</button>
+            </div>
+          </div>
+          <div class="tb-glance__control">
+            <p class="tb-glance__control-label" id="tb-glance-tier-label">Practice membership</p>
+            <div class="tb-pills" role="radiogroup" aria-labelledby="tb-glance-tier-label" data-tb-timeline-tiers>
+              <button class="tb-pill" type="button" role="radio" aria-checked="true" data-tier="silver" data-tier-label="Silver" data-per-month="5">Silver</button>
+              <button class="tb-pill" type="button" role="radio" aria-checked="false" tabindex="-1" data-tier="gold" data-tier-label="Gold" data-per-month="8">Gold</button>
+              <button class="tb-pill" type="button" role="radio" aria-checked="false" tabindex="-1" data-tier="platinum" data-tier-label="Platinum" data-per-month="16">Platinum</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tb-timeline" id="tb-timeline" data-tb-timeline>
+          <div class="tb-timeline__scroll">
+            <div class="tb-timeline__grid">
+              <div class="tb-timeline__corner" aria-hidden="true"></div>
+              <ol class="tb-timeline__weeks" aria-hidden="true">
+              <li>Week 1</li>
+              <li>Week 2</li>
+              <li>Week 3</li>
+              <li>Week 4</li>
+              <li>Week 5</li>
+              <li>Week 6</li>
+              <li>Week 7</li>
+              <li>Week 8</li>
+              <li>Week 9</li>
+              <li>Week 10</li>
+              <li>Week 11</li>
+              <li>Week 12</li>
+              </ol>
+
+              <h3 class="tb-timeline__label">
+                <span class="tb-timeline__key tb-timeline__key--lesson" aria-hidden="true"></span>Lessons
+              </h3>
+              <ol class="tb-timeline__track" data-tb-track="lesson" aria-label="Lessons"></ol>
+
+              <h3 class="tb-timeline__label">
+                <span class="tb-timeline__key tb-timeline__key--practice" aria-hidden="true"></span>Practice
+              </h3>
+              <ol class="tb-timeline__track" data-tb-track="practice" aria-label="Practice sessions"></ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+

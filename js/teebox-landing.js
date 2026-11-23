@@ -6,7 +6,11 @@
    5. Press quote: background parallax
    6. Primary buttons: left-to-right wipe hover
    7. Pricing: Silver / Gold / Platinum switcher
-   8. Nav dropdowns */
+   8. Nav dropdowns
+   9. Video pop-up
+   10. How it works: dotted line draws between the steps
+   11. Award badge: stop point
+   12. Pricing band: Member / Non-member toggle */
 
 /* ---------- 1. Mobile nav toggle ---------- */
 (function () {
@@ -387,4 +391,134 @@
       if (item.classList.contains('is-open')) { close(item); item.querySelector('button').focus(); }
     });
   });
+})();
+
+/* ---------- 9. Video pop-up ----------
+   Any [data-tb-video-open] button opens the shared <dialog data-tb-video> and
+   plays the file in its data-video-src (optional data-video-poster). Closing
+   (button, Escape or clicking the dark backdrop) pauses and unloads it. */
+(function () {
+  var dialog = document.querySelector('[data-tb-video]');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+  var video = dialog.querySelector('video');
+  var closeBtn = dialog.querySelector('[data-tb-video-close]');
+  var opener = null;
+
+  function open(btn) {
+    var src = btn.getAttribute('data-video-src');
+    if (!src) return;
+    opener = btn;
+    video.src = src;
+    if (btn.getAttribute('data-video-poster')) video.poster = btn.getAttribute('data-video-poster');
+    dialog.showModal();
+    var p = video.play();
+    if (p && p.catch) p.catch(function () { /* autoplay blocked: controls are visible */ });
+  }
+
+  function close() {
+    if (dialog.open) dialog.close();
+  }
+
+  dialog.addEventListener('close', function () {
+    video.pause();
+    video.removeAttribute('src');
+    video.load();
+    if (opener) opener.focus();
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-tb-video-open]'), function (btn) {
+    btn.addEventListener('click', function () { open(btn); });
+  });
+  closeBtn.addEventListener('click', close);
+  // a click on the backdrop lands on the dialog element itself
+  dialog.addEventListener('click', function (e) { if (e.target === dialog) close(); });
+})();
+
+/* ---------- 10. How it works: animated dotted line ----------
+   As each step reaches the middle of the screen its number fills gold and its
+   dotted line draws down towards the next number. Plays once; with JS off or reduced motion the line is shown in full. */
+(function () {
+  var list = document.querySelector('[data-tb-steps]');
+  if (!list || !('IntersectionObserver' in window)) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var steps = Array.prototype.slice.call(list.querySelectorAll('.tb-step'));
+  if (!steps.length) return;
+
+  list.classList.add('is-armed');
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      var step = entry.target;
+      io.unobserve(step);
+      var i = steps.indexOf(step);
+      step.classList.add('is-lit');
+      if (i < steps.length - 1) {
+        step.classList.add('is-drawn');
+      }
+    });
+  }, { rootMargin: '0px 0px -45% 0px' });
+
+  steps.forEach(function (step) { io.observe(step); });
+})();
+
+/* ---------- 11. Award badge: stop point ----------
+   The pinned badge (CSS sticky) stops with its centre on the vertical middle
+   of the "You need a plan" block. That depends on the block's height, so set
+   the rail's end point here and keep it right on resize. */
+(function () {
+  var track = document.querySelector('.tb-badge-track');
+  var plan = track && track.querySelector('.tb-plan');
+  var badge = track && track.querySelector('.tb-hero__badge');
+  if (!plan || !badge) return;
+  function update() {
+    var stop = plan.offsetHeight / 2 - badge.offsetHeight / 2;
+    track.style.setProperty('--tb-badge-stop', Math.max(0, stop) + 'px');
+  }
+  update();
+  window.addEventListener('resize', update);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(update);
+})();
+
+/* ---------- 12. Pricing band: Member / Non-member toggle ----------
+   Member: lessons-only "from" price and three benefits.
+   Non-member: Silver plan "from" price, plus "Membership included, no
+   joining fee". Without JS the toggle stays hidden and the member view shows. */
+(function () {
+  var wrap = document.querySelector('[data-tb-audience-wrap]');
+  var group = wrap && wrap.querySelector('[data-tb-audience-toggle]');
+  if (!group) return;
+  var buttons = Array.prototype.slice.call(group.querySelectorAll('[role="radio"]'));
+  var price = wrap.querySelector('[data-tb-audience-price]');
+  var text = wrap.querySelector('[data-tb-audience-text]');
+  var extras = Array.prototype.slice.call(wrap.querySelectorAll('[data-tb-audience]'));
+  var COPY = {
+    'member': { price: '£200', text: 'Save up to £511 compared with booking your lessons, membership and joining fee separately.' },
+    'non-member': { price: '£315', text: 'Save up to £511 compared with booking your lessons, membership and joining fee separately.' }
+  };
+
+  function select(btn, focus) {
+    var who = btn.getAttribute('data-audience');
+    buttons.forEach(function (b) {
+      var on = b === btn;
+      b.setAttribute('aria-checked', String(on));
+      b.tabIndex = on ? 0 : -1;
+    });
+    price.textContent = COPY[who].price;
+    text.textContent = COPY[who].text;
+    extras.forEach(function (li) { li.hidden = li.getAttribute('data-tb-audience') !== who; });
+    if (focus) btn.focus();
+  }
+
+  buttons.forEach(function (btn, i) {
+    btn.addEventListener('click', function () { select(btn, false); });
+    btn.addEventListener('keydown', function (e) {
+      var next = null;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = buttons[(i + 1) % buttons.length];
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = buttons[(i - 1 + buttons.length) % buttons.length];
+      if (next) { e.preventDefault(); select(next, true); }
+    });
+  });
+
+  group.hidden = false;
+  select(buttons[0], false);
 })();

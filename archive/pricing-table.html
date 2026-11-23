@@ -1,0 +1,109 @@
+<!--
+  ARCHIVED: Pricing table (6 / 12 / 24 lesson plans with Silver / Gold / Platinum switcher)
+  Removed from index.html on 23 Nov 2026 to shorten the page. To restore it,
+  paste this markup back into index.html straight before the gold "Plans from" banner. Its styles are still in
+  css/teebox-landing.css and its script still runs from js/teebox-landing.js
+  (both do nothing while the markup is absent).
+-->
+    <!-- ============ PRICING ============
+         Card style from Figma 3770:3843 "Pricing and plans"; figures from the
+         updated pricing brief (inc. VAT, standard £100 lesson rate).
+         Each card holds its Silver / Gold / Platinum prices in data-prices;
+         the tier pills (js/teebox-landing.js section 7) swap them in.
+         Without JS the Silver prices show. Coach-specific rates (e.g. Carl at
+         £120/lesson) aren't shown on this page. -->
+    <section class="tb-pricing" id="pricing" aria-labelledby="tb-pricing-title">
+      <div class="tb-container">
+        <h2 class="tb-h2 tb-pricing__title" id="tb-pricing-title">Pricing and plans</h2>
+        <p class="tb-pricing__intro">Every plan lasts 3 months, has no joining fee and starts with a swing evaluation. Save up to £511 compared with buying separately.</p>
+
+        <div class="tb-pills tb-pricing__tiers" role="radiogroup" aria-label="Practice membership" data-tb-tier-pills hidden>
+          <button class="tb-pill" type="button" role="radio" aria-checked="true" data-tier="silver" data-tier-label="Silver" data-sessions="5">Silver · 5 sessions a month</button>
+          <button class="tb-pill" type="button" role="radio" aria-checked="false" data-tier="gold" data-tier-label="Gold" data-sessions="8">Gold · 8 sessions a month</button>
+          <button class="tb-pill" type="button" role="radio" aria-checked="false" data-tier="platinum" data-tier-label="Platinum" data-sessions="16">Platinum · 16 sessions a month</button>
+        </div>
+
+        <ul class="tb-pricing__grid" aria-live="polite">
+          <li class="tb-price" data-lessons="6" data-prices='{"silver": {"price": "\u00a3945", "was": "\u00a31,096", "monthly": "\u00a3315"}, "gold": {"price": "\u00a31,110", "was": "\u00a31,234", "monthly": "\u00a3370"}, "platinum": {"price": "\u00a31,530", "was": "\u00a31,594", "monthly": "\u00a3510"}}'>
+            <div class="tb-price__card">
+              <h3 class="tb-price__name">6 lesson plan</h3>
+              <p class="tb-price__plan"><span data-tb-tier-name>Silver</span> practice · 3 months</p>
+              <p class="tb-price__blurb">A lesson every two weeks, with practice in between to lock in each change.</p>
+              <p class="tb-price__cost">
+                <span class="tb-price__amount" data-tb-price>£945</span>
+                <s class="tb-price__was"><span class="tb-visually-hidden">Was </span><span data-tb-was>£1,096</span></s>
+              </p>
+              <p class="tb-price__was-note">When buying lessons separately</p>
+              <p class="tb-price__note">or 3 monthly payments of <span data-tb-monthly>£315</span></p>
+              <ul class="tb-price__list">
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>6 lessons with your coach</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span><span data-tb-tier-name>Silver</span> practice membership<br>(<span data-tb-sessions>5</span> sessions a month)</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>No joining fee</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>Practice drills and guidance after each lesson</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>Send your practice reports to your coach for feedback</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>24-hour access to your coach</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>TrackMan screencast overview of every lesson</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>Free custom fitting worth £100</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>A progress review at the end of the 3 months</span></li>
+              </ul>
+              <a class="tb-btn tb-btn--gold tb-price__cta" href="#"><span>Book a swing evaluation</span></a>
+            </div>
+          </li>
+          <li class="tb-price tb-price--popular" data-lessons="12" data-prices='{"silver": {"price": "\u00a31,545", "was": "\u00a31,816", "monthly": "\u00a3515"}, "gold": {"price": "\u00a31,710", "was": "\u00a31,954", "monthly": "\u00a3570"}, "platinum": {"price": "\u00a32,130", "was": "\u00a32,314", "monthly": "\u00a3710"}}'>
+            <p class="tb-price__badge">Most popular</p>
+            <div class="tb-price__card">
+              <h3 class="tb-price__name">12 lesson plan</h3>
+              <p class="tb-price__plan"><span data-tb-tier-name>Silver</span> practice · 3 months</p>
+              <p class="tb-price__blurb">A lesson every week, with practice later the same week to build on it.</p>
+              <p class="tb-price__cost">
+                <span class="tb-price__amount" data-tb-price>£1,545</span>
+                <s class="tb-price__was"><span class="tb-visually-hidden">Was </span><span data-tb-was>£1,816</span></s>
+              </p>
+              <p class="tb-price__was-note">When buying lessons separately</p>
+              <p class="tb-price__note">or 3 monthly payments of <span data-tb-monthly>£515</span></p>
+              <ul class="tb-price__list">
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>12 lessons with your coach</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span><span data-tb-tier-name>Silver</span> practice membership<br>(<span data-tb-sessions>5</span> sessions a month)</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>No joining fee</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>Practice drills and guidance after each lesson</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>Send your practice reports to your coach for feedback</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>24-hour access to your coach</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>TrackMan screencast overview of every lesson</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>Free custom fitting worth £100</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>A progress review at the end of the 3 months</span></li>
+              </ul>
+              <a class="tb-btn tb-btn--gold tb-price__cta" href="#"><span>Book a swing evaluation</span></a>
+            </div>
+          </li>
+          <li class="tb-price" data-lessons="24" data-prices='{"silver": {"price": "\u00a32,745", "was": "\u00a33,256", "monthly": "\u00a3915"}, "gold": {"price": "\u00a32,910", "was": "\u00a33,394", "monthly": "\u00a3970"}, "platinum": {"price": "\u00a33,330", "was": "\u00a33,754", "monthly": "\u00a31,110"}}'>
+            <div class="tb-price__card">
+              <h3 class="tb-price__name">24 lesson plan</h3>
+              <p class="tb-price__plan"><span data-tb-tier-name>Silver</span> practice · 3 months</p>
+              <p class="tb-price__blurb">Two lessons a week and plenty of practice for the fastest progress.</p>
+              <p class="tb-price__cost">
+                <span class="tb-price__amount" data-tb-price>£2,745</span>
+                <s class="tb-price__was"><span class="tb-visually-hidden">Was </span><span data-tb-was>£3,256</span></s>
+              </p>
+              <p class="tb-price__was-note">When buying lessons separately</p>
+              <p class="tb-price__note">or 3 monthly payments of <span data-tb-monthly>£915</span></p>
+              <ul class="tb-price__list">
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>24 lessons with your coach</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span><span data-tb-tier-name>Silver</span> practice membership<br>(<span data-tb-sessions>5</span> sessions a month)</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>No joining fee</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>Practice drills and guidance after each lesson</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>Send your practice reports to your coach for feedback</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>24-hour access to your coach</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>TrackMan screencast overview of every lesson</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>Free custom fitting worth £100</span></li>
+                <li><img class="tb-price__tick" src="assets/icons/tick.svg" width="12" height="12" alt=""><span>A progress review at the end of the 3 months</span></li>
+              </ul>
+              <a class="tb-btn tb-btn--gold tb-price__cta" href="#"><span>Book a swing evaluation</span></a>
+            </div>
+          </li>
+        </ul>
+
+        <p class="tb-pricing__small">Prices include VAT where applicable. Pay in full or in three monthly instalments. Lessons stay valid for six months, to allow for injury or holidays. “Bought separately” is the same number of lessons at £120 each, plus 3 months of the matching membership and the £79 joining fee; savings exclude the free fitting and £100 voucher. When your 3 months end, you roll onto the matching monthly membership.</p>
+        <p class="tb-pricing__small tb-pricing__members">Already a Tee Box member? Lessons only: 6 lessons £600 · 12 lessons £1,200 · 24 lessons £2,400.</p>
+      </div>
+    </section>
+
