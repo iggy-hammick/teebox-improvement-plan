@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400&family=Poppins:wght@300;400;500;600&display=swap">
-  <link rel="stylesheet" href="css/teebox-landing.css?v=68">
+  <link rel="stylesheet" href="css/teebox-landing.css?v=69">
 </head>
 <body class="tb-page">
 
@@ -233,10 +233,11 @@
          a pop-up (js/teebox-landing.js section 9) playing phil-kenyon-qa.mp4. -->
     <section class="tb-quote" data-tb-parallax aria-label="Phil Kenyon on coaching at Tee Box">
       <img class="tb-quote__bg" src="assets/images/phil-kenyon.jpg" width="2400" height="1416" alt="" loading="lazy">
-      <!-- Phones only: a muted 12s loop of Phil talking (10s–22s of the Q&A)
-           over the photo. JS section 13 loads it when the section nears the
-           screen and pauses it off screen. -->
-      <video class="tb-quote__loop" data-tb-quote-loop data-src="assets/video/phil-kenyon-loop.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+      <!-- A muted 15.8s loop of Phil talking (213.56s–229.36s of the Q&A:
+           close-up, then two wider angles) over the photo. JS section 13
+           loads the phone or desktop size when the section nears the screen
+           and pauses it off screen. -->
+      <video class="tb-quote__loop" data-tb-quote-loop data-src="assets/video/phil-kenyon-loop.mp4" data-src-desktop="assets/video/phil-kenyon-loop-720.mp4" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
       <div class="tb-quote__fade" aria-hidden="true"></div>
       <div class="tb-container tb-quote__layout">
         <figure class="tb-quote__inner">
@@ -450,7 +451,7 @@
     </div>
   </footer>
 
-  <script src="js/teebox-landing.js?v=16" defer></script>
+  <script src="js/teebox-landing.js?v=17" defer></script>
   <!-- DEV ONLY: press G on localhost to toggle the 12-col layout grid. Safe to remove. -->
   <script src="js/teebox-grid.js?v=2" defer></script>
 </body>

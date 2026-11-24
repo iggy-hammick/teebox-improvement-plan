@@ -11,7 +11,7 @@
    10. How it works: dotted line draws between the steps
    11. Award badge: stop point
    12. Pricing band: Member / Non-member toggle
-   13. Phil Kenyon quote: looping background clip (phones) */
+   13. Phil Kenyon quote: looping background clip */
 
 /* ---------- 1. Mobile nav toggle ---------- */
 (function () {
@@ -239,7 +239,8 @@
       // 0 as the block enters at the bottom → 1 as it leaves at the top
       var progress = (vh - r.top) / (vh + r.height);
       progress = progress < 0 ? 0 : progress > 1 ? 1 : progress;
-      item.img.style.setProperty('--tb-parallax-y', ((progress - 0.5) * 2 * range).toFixed(1) + 'px');
+      // set on the block so the photo and the looping clip drift together
+      item.block.style.setProperty('--tb-parallax-y', ((progress - 0.5) * 2 * range).toFixed(1) + 'px');
     });
   }
 
@@ -524,10 +525,12 @@
   select(buttons[0], false);
 })();
 
-/* ---------- 13. Phil Kenyon quote: looping background clip (phones) ----------
-   Below 768px a muted 12s loop of Phil plays over his photo. The file only
-   loads when the section is within 300px of the screen, and it pauses while
-   off screen. Skipped with reduced motion; the photo stays as the fallback. */
+/* ---------- 13. Phil Kenyon quote: looping background clip ----------
+   A muted 15.8s loop of Phil plays over his photo: data-src (960x540) on
+   phones, data-src-desktop (1280x720) from 768px up, picked when it first
+   loads. The file only loads when the section is within 300px of the screen,
+   and it pauses while off screen. Skipped with reduced motion; the photo
+   stays as the fallback. */
 (function () {
   var video = document.querySelector('[data-tb-quote-loop]');
   if (!video || !('IntersectionObserver' in window)) return;
@@ -538,8 +541,10 @@
 
   var io = new IntersectionObserver(function (entries) {
     var visible = entries[entries.length - 1].isIntersecting;
-    if (visible && phone.matches && !calm.matches) {
-      if (!video.getAttribute('src')) video.src = video.getAttribute('data-src');
+    if (visible && !calm.matches) {
+      if (!video.getAttribute('src')) {
+        video.src = video.getAttribute(phone.matches ? 'data-src' : 'data-src-desktop') || video.getAttribute('data-src');
+      }
       var p = video.play();
       if (p && p.catch) p.catch(function () { /* autoplay blocked: photo stays */ });
     } else if (!video.paused) {
