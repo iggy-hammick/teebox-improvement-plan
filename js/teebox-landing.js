@@ -537,7 +537,13 @@
   var phone = window.matchMedia('(max-width: 767px)');
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  video.addEventListener('playing', function () { video.classList.add('is-playing'); });
+  var block = video.closest('.tb-quote');
+  // once the clip plays, the photo underneath fades out so it can't show
+  // through the semi-transparent video (see .tb-quote.is-loop-playing)
+  video.addEventListener('playing', function () {
+    video.classList.add('is-playing');
+    if (block) block.classList.add('is-loop-playing');
+  });
 
   var io = new IntersectionObserver(function (entries) {
     var visible = entries[entries.length - 1].isIntersecting;
@@ -551,5 +557,5 @@
       video.pause();
     }
   }, { rootMargin: '300px 0px' });
-  io.observe(video.closest('.tb-quote') || video);
+  io.observe(block || video);
 })();

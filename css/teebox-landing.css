@@ -845,6 +845,10 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   pointer-events: none;
 }
 .tb-quote__loop.is-playing { opacity: 0.7; }
+/* the photo is only a fallback: hide it while the clip plays, so it doesn't
+   ghost through the 70% video */
+.tb-quote__bg { transition: opacity .6s ease; }
+.tb-quote.is-loop-playing .tb-quote__bg { opacity: 0; }
 .tb-quote__play:hover { transform: scale(1.06); }
 .tb-quote__play:focus-visible { outline: 2px solid var(--tb-gold); outline-offset: 6px; }
 
