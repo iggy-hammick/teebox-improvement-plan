@@ -485,22 +485,39 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
 .tb-rating__logo { flex: none; }
 .tb-rating__body { display: flex; flex-direction: column; gap: 6px; }
 .tb-rating__text { font-size: 14px; line-height: 1.4; color: var(--tb-text-muted); }
+.tb-rating__badge { display: none; } /* phones only, see below */
 
 @media (max-width: 767px) {
   .tb-hero { min-height: 0; }
+  /* phones: a shorter image pinned to the top of the hero, so less of the
+     photo is cropped away; black below it */
+  .tb-hero__media { bottom: auto; height: var(--tb-hero-img-h); }
+  .tb-hero {
+    --tb-hero-img-h: 440px;
+  }
   .tb-hero__image {
     left: 0; top: 0;
     width: 100%; height: 100%;
-    object-position: 62% 50%;
+    object-position: 62% 0;
   }
   .tb-hero__fade {
     left: 0; width: 100%;
-    background: linear-gradient(to top, var(--tb-black) 20%, rgba(0, 0, 0, 0.55) 70%, rgba(0, 0, 0, 0.35));
+    background: linear-gradient(to top, var(--tb-black) 8%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.35));
   }
-  .tb-hero__content { padding-top: 360px; padding-bottom: 56px; }
-  /* phones: small, top-right of the hero, no pinning */
-  .tb-badge-rail { --tb-badge-size: 104px; top: 168px; bottom: auto; }
-  .tb-hero__badge { position: static; width: 96px; height: 96px; }
+  .tb-hero__content { padding-top: 320px; padding-bottom: 56px; }
+  /* phones: the award badge sits right of the Google score, centred on it,
+     instead of pinning in the hero */
+  .tb-badge-rail { display: none; }
+  .tb-rating__badge {
+    display: block;
+    flex: none;
+    margin-left: auto;
+    width: 96px;
+    height: 96px;
+    border: 4px solid var(--tb-bg-deep);
+    border-radius: 50%;
+    box-sizing: content-box;
+  }
 }
 
 /* =========================================================================
