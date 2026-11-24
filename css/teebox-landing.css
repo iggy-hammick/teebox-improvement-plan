@@ -498,13 +498,21 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   .tb-hero__image {
     left: 0; top: 0;
     width: 100%; height: 100%;
-    object-position: 62% 0;
+    /* 34% puts the golfers about 80px further right than 62% did,
+       keeping a good amount of the simulator screen */
+    object-position: 34% 0;
   }
+  /* lighter than desktop: clear over the photo, black only behind the copy */
   .tb-hero__fade {
     left: 0; width: 100%;
-    background: linear-gradient(to top, var(--tb-black) 8%, rgba(0, 0, 0, 0.55) 45%, rgba(0, 0, 0, 0.35));
+    background: linear-gradient(to top, var(--tb-black) 4%, rgba(0, 0, 0, 0.6) 28%, rgba(0, 0, 0, 0) 60%);
   }
-  .tb-hero__content { padding-top: 320px; padding-bottom: 56px; }
+  .tb-header::before {
+    height: 180px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
+  }
+  .tb-hero__content { padding-top: 336px; padding-bottom: 56px; }
+  .tb-hero__ctas { margin-top: 16px; } /* same as headline → subheadline */
   /* phones: the award badge sits right of the Google score, centred on it,
      instead of pinning in the hero */
   .tb-badge-rail { display: none; }
