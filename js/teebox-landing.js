@@ -10,7 +10,8 @@
    9. Video pop-up
    10. How it works: dotted line draws between the steps
    11. Award badge: stop point
-   12. Pricing band: Member / Non-member toggle */
+   12. Pricing band: Member / Non-member toggle
+   13. Phil Kenyon quote: looping background clip (phones) */
 
 /* ---------- 1. Mobile nav toggle ---------- */
 (function () {
@@ -521,4 +522,29 @@
 
   group.hidden = false;
   select(buttons[0], false);
+})();
+
+/* ---------- 13. Phil Kenyon quote: looping background clip (phones) ----------
+   Below 768px a muted 12s loop of Phil plays over his photo. The file only
+   loads when the section is within 300px of the screen, and it pauses while
+   off screen. Skipped with reduced motion; the photo stays as the fallback. */
+(function () {
+  var video = document.querySelector('[data-tb-quote-loop]');
+  if (!video || !('IntersectionObserver' in window)) return;
+  var phone = window.matchMedia('(max-width: 767px)');
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  video.addEventListener('playing', function () { video.classList.add('is-playing'); });
+
+  var io = new IntersectionObserver(function (entries) {
+    var visible = entries[entries.length - 1].isIntersecting;
+    if (visible && phone.matches && !calm.matches) {
+      if (!video.getAttribute('src')) video.src = video.getAttribute('data-src');
+      var p = video.play();
+      if (p && p.catch) p.catch(function () { /* autoplay blocked: photo stays */ });
+    } else if (!video.paused) {
+      video.pause();
+    }
+  }, { rootMargin: '300px 0px' });
+  io.observe(video.closest('.tb-quote') || video);
 })();

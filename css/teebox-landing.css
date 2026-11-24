@@ -826,6 +826,7 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
   transition: transform .3s cubic-bezier(.2, .7, .2, 1);
 }
 .tb-quote__play img { width: 100%; height: 100%; }
+.tb-quote__loop { display: none; } /* phones only, see below */
 .tb-quote__play:hover { transform: scale(1.06); }
 .tb-quote__play:focus-visible { outline: 2px solid var(--tb-gold); outline-offset: 6px; }
 
@@ -859,6 +860,22 @@ button.tb-nav__link { background: none; border: 0; padding: 0; font-family: inhe
     opacity: 1;
     transform: none; /* no parallax drift, so the cropped edge never shows */
   }
+  /* the looping clip has no frame, so it starts at the top; it fades in over
+     the photo once it's playing (JS section 13 adds .is-playing) */
+  .tb-quote__loop {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: calc(var(--tb-quote-img-h) - 24px);
+    object-fit: cover;
+    object-position: 67% 0;
+    opacity: 0;
+    transition: opacity .6s ease;
+    pointer-events: none;
+  }
+  .tb-quote__loop.is-playing { opacity: 1; }
   .tb-quote__fade {
     inset: 0;
     width: auto;
